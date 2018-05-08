@@ -10,6 +10,7 @@ import net.sourceforge.argparse4j.inf.*;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.lang.RuntimeException;
+import java.lang.System;
 import java.lang.Exception;
 import java.util.Arrays;
 import java.util.List;
@@ -40,13 +41,20 @@ public class GlobeSortClient {
 
     public void run(Integer[] values) throws Exception {
         System.out.println("Pinging " + serverStr + "...");
+        // time here
+        long startTime = System.currentTimeMillis();
         serverStub.ping(Empty.newBuilder().build());
-        System.out.println("Ping successful.");
+        long endTime = System.currentTimeMillis();
+        System.out.println("Ping successful with " + (endTime - startTime) + "ms");
 
         System.out.println("Requesting server to sort array");
         IntArray request = IntArray.newBuilder().addAllValues(Arrays.asList(values)).build();
+        // time here
+        startTime = System.currentTimeMillis();
         IntArray response = serverStub.sortIntegers(request);
-        System.out.println("Sorted array");
+        // end timer
+        endTime = System.currentTimeMillis();
+        System.out.println("Sorted array with " + (endTime - startTime) + "ms");
     }
 
     public void shutdown() throws InterruptedException {

@@ -6,6 +6,7 @@ import io.grpc.stub.StreamObserver;
 import net.sourceforge.argparse4j.*;
 import net.sourceforge.argparse4j.inf.*;
 import java.io.IOException;
+import java.lang.System;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
@@ -86,6 +87,8 @@ public class GlobeSortServer {
 
         @Override
         public void sortIntegers(IntArray req, final StreamObserver<IntArray> responseObserver) {
+            // timer here
+            long startTime = System.currentTimeMillis();
             Integer[] values = req.getValuesList().toArray(new Integer[req.getValuesList().size()]);
             Arrays.sort(values);
             IntArray.Builder responseBuilder = IntArray.newBuilder();
@@ -95,6 +98,9 @@ public class GlobeSortServer {
             IntArray response = responseBuilder.build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+            // end timer
+            long endTime = System.currentTimeMillis();
+            System.out.println("Sort Takes: " + (endTime - startTime) + "ms");
         }
     }
 }
